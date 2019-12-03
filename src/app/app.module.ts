@@ -1,18 +1,22 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-
+import { AonWebElementWipComponent } from './aon-web-element-wip/aon-web-element-wip.component';
+import { createCustomElement } from '@angular/elements';
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  declarations: [AonWebElementWipComponent,],
+  imports: [BrowserModule],
   providers: [],
-  bootstrap: [AppComponent]
+  entryComponents: [AonWebElementWipComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) { }
+  ngDoBootstrap() {
+    // using createCustomElement from angular package it will convert angular component to stander web component
+    const el = createCustomElement(AonWebElementWipComponent, {
+      injector: this.injector
+    });
+    // using built in the browser to create your own custome element name [HTML Tag]
+    customElements.define('web-element', el);
+  }
+}
